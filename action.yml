@@ -8,10 +8,10 @@ inputs:
     description: 'Container Image'
     required: true
   dry_run:
-    description: set to true to prevent real deployment (boolean value)
+    description: set to non-empty string to prevent real deployment
     required: false
-    type: boolean
-    default: false
+    type: string
+    default: ""
 runs:
   using: "composite"
   steps:      
@@ -35,7 +35,7 @@ runs:
         shell: bash
 
       - uses: Azure/k8s-deploy@v1
-        if: ${{ inputs.dry_run == 'false' }}
+        if: ${{ inputs.dry_run != '' }}
         with:
           manifests: ${{ steps.bake.outputs.manifestsBundle }}
           images: |
