@@ -17,8 +17,9 @@ runs:
           envkey_IR_DATAWRAPPER_TOKEN: dfgjd
           envkey_azure-application-insights-instrumentation-key-dev: abc
           directory: ${{inputs.folder}}
-          file_name: ${{folder.folder}}.env.secret
+          file_name: ${{inputs.folder}}.env.secret
 
       - name: output secrets
         run: |
-          cat ${{folder.folder}}/${{folder.folder}}.env.secret
+          cat ${{inputs.folder}}/${{inputs.folder}}.env.secret
+        shell: bash
