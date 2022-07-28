@@ -13,7 +13,7 @@ runs:
       - uses: azure/k8s-bake@v2.2
         with:
           renderEngine: "kustomize"
-          kustomizationPath: ${{ input.folder }}
+          kustomizationPath: ${{ inputs.folder }}
       - name: Get image digest
         id: image_digest
         run: |
