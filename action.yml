@@ -12,7 +12,7 @@ inputs:
     required: false
     type: string
     default: ""
-  KUBE_CONFIG:
+  kube_config:
     description: kubeconfig to use
     required: true
     type: string
@@ -21,7 +21,7 @@ runs:
   steps:
       - uses: Azure/k8s-set-context@v2
         with:
-          kubeconfig: ${{ inputs.KUBE_CONFIG }}  
+          kubeconfig: ${{ inputs.kube_config }}  
       - uses: azure/k8s-bake@v2.2
         id: bake
         with:
