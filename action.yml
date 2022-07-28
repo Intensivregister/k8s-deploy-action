@@ -4,21 +4,24 @@ inputs:
   folder:
     description: 'Folder with the manifest to bake'
     required: true
-  secrets:
+  image:
     description: 'Contents to inject into env file'
     required: false
 runs:
   using: "composite"
-  steps:
-      - name: Make ir-backend envfile
-        uses: SpicyPizza/create-envfile@v1.3
+  steps:      
+      - uses: azure/k8s-bake@v2.2
         with:
-          envkey_IR_DATAWRAPPER_TOKEN: ${{ inputs.secrets.ABC }}
-          envkey_azure-application-insights-instrumentation-key-dev: abc
-          directory: "./${{inputs.folder}}"
-          file_name: ${{inputs.folder}}.env.secret
-
-      - name: output secrets
+          renderEngine: "kustomize"
+          kustomizationPath: "./backend/"
+      - name: Get image digest
+        id: image_digest
         run: |
-          cat ${{inputs.folder}}/${{inputs.folder}}.env.secret
-        shell: bash
+          jsonMetadata=$(skopeo inspect docker://${{ image }})
+          jsonMetadata="${jsonMetadata//'%'/'%25'}"
+          jsonMetadata="${jsonMetadata//$'\n'/'%0A'}"
+          jsonMetadata="${jsonMetadata//$'\r'/'%0D'}"
+          echo "::set-output name=metadata::$jsonMetadata"
+      - name: Print digest
+        run: |
+          echo "${{ fromJson(steps.image_digest.outputs.metadata).Name }}@${{ fromJson(steps.image_digest.outputs.metadata).Digest }}"
