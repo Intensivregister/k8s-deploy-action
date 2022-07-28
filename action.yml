@@ -15,7 +15,7 @@ runs:
         with:
           envkey_IR_DATAWRAPPER_TOKEN: dfgjd
           envkey_azure-application-insights-instrumentation-key-dev: abc
-          directory: ${{inputs.folder}}
+          directory: "./${{inputs.folder}}"
           file_name: ${{inputs.folder}}.env.secret
 
       - name: output secrets
