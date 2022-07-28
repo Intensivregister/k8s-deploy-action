@@ -5,12 +5,18 @@ inputs:
     description: 'Folder with the manifest to bake'
     required: true
   image:
-    description: 'Contents to inject into env file'
+    description: 'Container Image'
     required: true
+  dry_run:
+    description: set to true to prevent real deployment (boolean value)
+    required: false
+    type: boolean
+    default: false
 runs:
   using: "composite"
   steps:      
       - uses: azure/k8s-bake@v2.2
+        id: bake
         with:
           renderEngine: "kustomize"
           kustomizationPath: ${{ inputs.folder }}
@@ -27,3 +33,11 @@ runs:
         run: |
           echo "${{ fromJson(steps.image_digest.outputs.metadata).Name }}@${{ fromJson(steps.image_digest.outputs.metadata).Digest }}"
         shell: bash
+
+      - uses: Azure/k8s-deploy@v1
+        if: ${{ inputs.dry_run == 'false' }}
+        with:
+          manifests: ${{ steps.bake.outputs.manifestsBundle }}
+          images: |
+            ${{ fromJson(steps.image_digest.outputs.metadata).Name }}@${{ fromJson(steps.image_digest.outputs.metadata).Digest }}
+
