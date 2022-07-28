@@ -16,6 +16,10 @@ inputs:
     description: kubeconfig to use
     required: true
     type: string
+  namespace:
+    description: namespace to deploy into
+    required: true
+    type: string
 runs:
   using: "composite"
   steps:
@@ -42,8 +46,9 @@ runs:
         shell: bash
 
       - uses: Azure/k8s-deploy@v1
-        if: ${{ inputs.dry_run != '' }}
+        if: ${{ inputs.dry_run == '' }}
         with:
+          namespace: ${{ inputs.namespace }}
           manifests: ${{ steps.bake.outputs.manifestsBundle }}
           images: |
             ${{ fromJson(steps.image_digest.outputs.metadata).Name }}@${{ fromJson(steps.image_digest.outputs.metadata).Digest }}
