@@ -22,6 +22,8 @@ runs:
           jsonMetadata="${jsonMetadata//$'\n'/'%0A'}"
           jsonMetadata="${jsonMetadata//$'\r'/'%0D'}"
           echo "::set-output name=metadata::$jsonMetadata"
+        shell: bash
       - name: Print digest
         run: |
           echo "${{ fromJson(steps.image_digest.outputs.metadata).Name }}@${{ fromJson(steps.image_digest.outputs.metadata).Digest }}"
+        shell: bash
