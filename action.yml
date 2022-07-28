@@ -1,0 +1,24 @@
+name: 'k8s-deploy-action'
+description: 'Bake with kustomize and deploy to k8s'
+inputs:
+  folder:
+    description: 'Folder with the manifest to bake'
+    required: true
+  secrets:
+    description: 'Contents to inject into env file'
+    required: false
+    default: []
+runs:
+  using: "composite"
+  steps:
+      - name: Make ir-backend envfile
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_IR_DATAWRAPPER_TOKEN: dfgjd
+          envkey_azure-application-insights-instrumentation-key-dev: abc
+          directory: ${{inputs.folder}}
+          file_name: ${{folder.folder}}.env.secret
+
+      - name: output secrets
+        run: |
+          cat ${{folder.folder}}/${{folder.folder}}.env.secret
