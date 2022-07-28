@@ -6,18 +6,18 @@ inputs:
     required: true
   image:
     description: 'Contents to inject into env file'
-    required: false
+    required: true
 runs:
   using: "composite"
   steps:      
       - uses: azure/k8s-bake@v2.2
         with:
           renderEngine: "kustomize"
-          kustomizationPath: "./backend/"
+          kustomizationPath: ${{ input.folder }}
       - name: Get image digest
         id: image_digest
         run: |
-          jsonMetadata=$(skopeo inspect docker://${{ image }})
+          jsonMetadata=$(skopeo inspect docker://${{ inputs.image }})
           jsonMetadata="${jsonMetadata//'%'/'%25'}"
           jsonMetadata="${jsonMetadata//$'\n'/'%0A'}"
           jsonMetadata="${jsonMetadata//$'\r'/'%0D'}"
