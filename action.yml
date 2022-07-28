@@ -7,7 +7,6 @@ inputs:
   secrets:
     description: 'Contents to inject into env file'
     required: false
-    default: []
 runs:
   using: "composite"
   steps:
