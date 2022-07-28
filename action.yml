@@ -13,7 +13,7 @@ runs:
       - name: Make ir-backend envfile
         uses: SpicyPizza/create-envfile@v1.3
         with:
-          envkey_IR_DATAWRAPPER_TOKEN: ${{ secrets.ABC }}
+          envkey_IR_DATAWRAPPER_TOKEN: ${{ inputs.secrets.ABC }}
           envkey_azure-application-insights-instrumentation-key-dev: abc
           directory: "./${{inputs.folder}}"
           file_name: ${{inputs.folder}}.env.secret
