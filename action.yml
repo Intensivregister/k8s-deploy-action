@@ -12,10 +12,6 @@ inputs:
     required: false
     type: string
     default: ""
-  kube_config:
-    description: kubeconfig to use
-    required: true
-    type: string
   namespace:
     description: namespace to deploy into
     required: true
@@ -23,9 +19,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-      - uses: Azure/k8s-set-context@v2
-        with:
-          kubeconfig: ${{ inputs.kube_config }}  
       - uses: azure/k8s-bake@v2.2
         id: bake
         with:
