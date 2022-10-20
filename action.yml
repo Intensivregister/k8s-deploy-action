@@ -41,6 +41,7 @@ runs:
       - uses: Azure/k8s-deploy@v4
         if: ${{ inputs.dry_run == '' }}
         with:
+          pull-images: false
           namespace: ${{ inputs.namespace }}
           manifests: ${{ steps.bake.outputs.manifestsBundle }}
           images: |
