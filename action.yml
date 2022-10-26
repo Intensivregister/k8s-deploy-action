@@ -42,6 +42,7 @@ runs:
         if: ${{ inputs.dry_run == '' }}
         with:
           pull-images: false
+          annotate-namespace: false
           namespace: ${{ inputs.namespace }}
           manifests: ${{ steps.bake.outputs.manifestsBundle }}
           images: |
